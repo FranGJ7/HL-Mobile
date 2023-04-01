@@ -1,29 +1,63 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Button, Box, Input, Center, Link, Text } from "native-base";
 import { RootStackParamList } from "../../routes";
+import { Formik } from "formik";
+import * as  yup from "yup"
 
 type Props = NativeStackScreenProps<RootStackParamList>;
 
 
+
 export const Register = ({ navigation }: Props) => {
+
+    const initialValues = {
+        name: "",
+        email: "",
+        password: "", 
+        confirmPassword: ""
+    }
+
+
+    const LoginSchema = yup.object().shape({
+        name: yup.string().required('Campo obrigatório'),
+        email: yup.string().email('Email inválido').required('Campo obrigatório'),
+        password: yup.string().required('Campo obrigatório').min(8).max(40).matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.]{8,}$/,
+            'A senha deve conter pelo menos uma letra minúscula, uma letra maiúscula, um número e um caractere especial.'),
+        confirmPassword: yup.string()
+            .oneOf([yup.ref('password'), ""], 'As senhas tem que ser igual!')
+            .required('Requerido'),
+    });
+
+
+
     return (
-        <Center flex={1} px="3">
+        <Center flex={1} px="3"> 
             <Text>Registar-se</Text>
-            <Box alignItems="center">
-                <Input mx="3" placeholder="Digite seu nome completo.." w="80%" />
-            </Box>
-            <Box alignItems="center">
-                <Input mx="3" placeholder="Endereço email.." w="80%" />
-            </Box>
-            <Box alignItems="center">
-                <Input mx="3" placeholder="Senha.." w="80%" />
-            </Box>
-            <Box alignItems="center">
-                <Input mx="3" placeholder="Confirmar senha.." w="80%" />
-            </Box>
-            <Box alignItems="center">
-                <Button onPress={() => navigation.navigate('Home')}>Cadastrar</Button>
-            </Box>
+
+            <Formik
+                validationSchema={LoginSchema}
+                initialValues={initialValues}
+                onSubmit={values => console.log(values)}
+            >
+
+                {({ handleChange, handleSubmit, values, errors }) => (
+                    <Box alignItems="center">
+                        <Input w="80%" mx="3" type="text" placeholder="Digite seu nome completo.." onChangeText={handleChange('name')} value={values.name} />
+                        {errors.name && <Text>{errors.name}</Text>}
+
+                        <Input w="80%" mx="3" type="email" placeholder="Endereço email.." onChangeText={handleChange('email')} value={values.email} />
+                        {errors.email && <Text>{errors.email}</Text>}
+
+                        <Input w="80%" mx="3" type="password" placeholder="Senha.." onChangeText={handleChange('password')} value={values.password} />
+                        {errors.password && <Text>{errors.password}</Text>}
+
+                        <Input w="80%" mx="3" type="password" placeholder="Confirmar senha.." onChangeText={handleChange('confirmPassword')} value={values.confirmPassword} />
+                        {errors.confirmPassword && <Text>{errors.confirmPassword}</Text>}
+
+                        <Button onPress={() => { handleSubmit() }}>Cadastrar</Button>
+                    </Box>
+                )}
+            </Formik>
             <Link onPress={() => navigation.navigate('Login')}
                 isExternal _text={{
                     color: "blue.400"
