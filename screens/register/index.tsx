@@ -3,6 +3,7 @@ import { Button, Box, Input, Center, Link, Text } from "native-base";
 import { RootStackParamList } from "../../routes";
 import { Formik } from "formik";
 import * as  yup from "yup"
+import axios from "axios";
 
 type Props = NativeStackScreenProps<RootStackParamList>;
 
@@ -13,7 +14,7 @@ export const Register = ({ navigation }: Props) => {
     const initialValues = {
         name: "",
         email: "",
-        password: "", 
+        password: "",
         confirmPassword: ""
     }
 
@@ -30,8 +31,33 @@ export const Register = ({ navigation }: Props) => {
 
 
 
+
+
+
+    //AXIOS**************************************************//
+    const createUser = async () => {
+        try {
+            const create = await axios.post('http://10.0.2.2:3000/register', {
+                name: "fransssssssssssssssssssssssssssss",
+                email: "frangggggggggggggj7@gmail",
+                password: "123456789",
+                confirmPassword: "123456789"
+            })
+        } catch (error) {
+
+        }
+    }
+
+
+
+
+
+
+
+
+
     return (
-        <Center flex={1} px="3"> 
+        <Center flex={1} px="3">
             <Text>Registar-se</Text>
 
             <Formik
@@ -67,6 +93,7 @@ export const Register = ({ navigation }: Props) => {
             >
                 Já tem uma conta?
             </Link>
+            <Button onPress={() => createUser()}>Cadastrar</Button>
         </Center>
     );
 }
