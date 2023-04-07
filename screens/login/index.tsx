@@ -1,6 +1,7 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Button, Box, Input, Center, Link, Text } from "native-base";
 import { Formik } from 'formik';
+import axios from "axios"
 import { RootStackParamList } from "../../routes";
 import * as yup from 'yup';
 
@@ -22,6 +23,35 @@ export const Login = ({ navigation }: Props) => {
         email: yup.string().email('Email inválido').required('Campo obrigatório'),
         password: yup.string().required('Campo obrigatório'),
     });
+
+
+
+
+
+
+  //AXIOS//////////////////////
+
+    const loginUser = async () => {
+        try {
+            const login = await axios.post('http://10.0.2.2:3000/login', {
+                email: "frangggggggggggggj7@gmail",
+                password: "123456789",
+            })
+            const result = login.data
+            console.log(result)
+        } catch (error) {
+           console.log("Deu ruim!")
+        }
+    }
+
+
+
+
+
+
+
+
+
 
     return (
         <Center flex={1} px="3">
@@ -63,7 +93,7 @@ export const Login = ({ navigation }: Props) => {
                             Esqueceu sua senha?
                         </Link>
 
-                        <Button onPress={() => handleSubmit()} >Entrar</Button>
+                        <Button onPress={() => loginUser()} >Entrar</Button>
                     </Box>
                 )}
             </Formik>

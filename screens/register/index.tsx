@@ -93,7 +93,6 @@ export const Register = ({ navigation }: Props) => {
             >
                 Já tem uma conta?
             </Link>
-            <Button onPress={() => createUser()}>Cadastrar</Button>
         </Center>
     );
 }
